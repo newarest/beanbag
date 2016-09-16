@@ -1,0 +1,54 @@
+* {
+    box-sizing: border-box;
+}
+.bb-full-width {
+    width: 100% !important;
+    float: none !important;
+}
+.bb-wrap {
+    display: none;
+}
+.bb-wrap:first-of-type {
+    display: block;
+}
+.bb-wrap form p {
+    width: 30%;
+    float: left;
+    margin-right: 1.5%;
+}
+.bb-wrap form p:nth-child(3n) {
+    margin-right: 0;
+}
+.bb-wrap input[type="text"],
+.bb-wrap form img {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 7px;
+}
+.bb-wrap form img {
+    background-color: #fff;
+    padding: 3px;
+    border: 1px solid #999;
+    border-radius: 5px;
+}
+.bb-wrap form img:hover {
+    box-shadow: 0 0 4px #999;
+}
+.bb-wrap input[type="text"] {
+    min-width: 150px;
+    padding: 7px;
+    font-size: 14px;
+}
+.bb-wrap textarea {
+    min-width: 300px;
+    width: 70%;
+    padding: 7px;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px;
+}
+.bb-wrap label {
+    display: inline-block;
+    font-size: 14px;
+    margin-right: 10px;
+}
