@@ -50,8 +50,9 @@ vstavka.addFooterBtn('Закрыть окно', 'tingle-btn tingle-btn--primary 
 
     //console.log(content);
     modal.setContent(content);
-    jQuery('#bb-choose-pattern').click(function() {
+    jQuery('#bb-choose-pattern,  #user-choose-pic').click(function() {
         modal.open();
+        $('.bb-form-control :radio').on('click', {func: "chooseMainPattern"} , choosePattern);
     });
 
     jQuery.expr[":"].Contains = jQuery.expr.createPseudo(function(arg) {
@@ -60,12 +61,8 @@ vstavka.addFooterBtn('Закрыть окно', 'tingle-btn tingle-btn--primary 
         };
     });
 
-    $('.bb-form-control :radio').click(function() {
-        var text = $(this).parent().find('label:last-child').text();
-        var img = $(this).parent().find('img').attr('src');
-        var form = $(this).parents('form').attr('id').slice(3);
+    function chooseMainPattern(text, form, img) {
         $('.bb-footer-message').html('Вы выбрали ткань <strong>' + text + '</strong>');
-
         $('select:first').val(form);
         $('select:first').change();
         var val = $('select:eq(1)').find('option:Contains(' + text + ')').val();
@@ -75,28 +72,45 @@ vstavka.addFooterBtn('Закрыть окно', 'tingle-btn tingle-btn--primary 
         $('.bb-hide:first').removeClass('bb-hide');
         $('#user-choose').text(text);
         $('#user-choose-pic').attr('src', img);
-        if ($('#bb-vstavka-pattern')) {
+        if (vst_btn) {
             var vstBtn = $('#bb-vstavka-pattern');
             vstBtn.removeClass("disabled");
             vstBtn.unbind('click');
             vstavka.setContent($('#' + form).html());
-            vstBtn.click(function() {
+            var for_vst = $('#bb-vstavka-pattern, #user-dop-pic');
+            for_vst.click(function() {
                 vstavka.open();
-            });
-            $('.bb-form-control :radio').click(function() {
-                var vst_text = $(this).parent().find('label:last-child').text();
-                var vst_img = $(this).parent().find('img').attr('src');
-                $('.bb-footer-vstavka').html('Вы выбрали ткань <strong>' + vst_text + '</strong>');
-                $('select:eq(2)').find('option:Contains(' + vst_text + ')').attr("selected", true);
-                $('select:eq(2)').change();
-                $('#user-dop-choose').text(vst_text);
-                $('#user-dop-pic').attr('src', vst_img);
-                $('.bb-hide').removeClass('bb-hide');
+                $('#' + form + ' :radio').on('click',{func: "chooseVstavkaPattern"},  choosePattern);
             });
         }
-        // $('select:eq(1)').append('<option class="attached enabled" value="'+$(this).attr('id')+'" selected="selected">'+text+'</option>');
-        //.append('<option value="'+$(this).val()+'" selected="selected">'+text+'</option>');
-    });
+    }
+
+    function chooseVstavkaPattern(text, form, img) {
+        $('.bb-footer-vstavka').html('Вы выбрали ткань <strong>' + text + '</strong>');
+        $('select:eq(2)').find('option:Contains(' + text + ')').attr("selected", true);
+        $('select:eq(2)').change();
+        $('#user-dop-choose').text(text);
+        $('#user-dop-pic').attr('src', img);
+        $('.bb-hide').removeClass('bb-hide');
+        
+    }
+    var vst_btn = $('button').is('#bb-vstavka-pattern');
+    console.log(vst_btn);
+
+    function choosePattern(event) {
+        var text = $(this).parent().find('label:last-child').text();
+        var img = $(this).parent().find('img').attr('src');
+        var form = $(this).parents('form').attr('id').slice(3);
+        if (event.data.func == "chooseMainPattern") chooseMainPattern(text, form, img);
+        else chooseVstavkaPattern(text, form, img);
+        $('.tingle-btn--primary').text("Подтвердите свой выбор");
+        //var regex = new RegExp(text, 'i'); // expression here             
+        //        $("select:eq(1) option").filter(function() {
+        //            return regex.test($(this).text());
+        //        }).attr("selected", true);
+
+        
+    }
 
     $('#bb-vstavka-pattern.disabled').click(function() {
         warn.open();
